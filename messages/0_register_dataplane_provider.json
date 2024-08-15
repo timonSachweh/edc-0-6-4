@@ -1,0 +1,22 @@
+{
+    "@context": {
+      "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
+    },
+    "@id": "http-pull-consumer-dataplane",
+    "url": "http://localhost:19192/control/transfer",
+    "allowedSourceTypes": [
+      "HttpData",
+      "Kafka",
+      "KafkaBroker"
+    ],
+    "allowedDestTypes": [
+      "HttpProxy",
+      "HttpData",
+      "Kafka",
+      "KafkaBroker"
+    ],
+    "properties": {
+      "https://w3id.org/edc/v0.0.1/ns/publicApiUrl/publicApiUrl": "http://localhost:19291/public/"
+    }
+  }
+  

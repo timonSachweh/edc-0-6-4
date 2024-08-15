@@ -1,0 +1,14 @@
+{
+    "@context": {
+      "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
+    },
+    "@id": "kafka-provider-contract",
+    "accessPolicyId": "allowAll",
+    "contractPolicyId": "allowAll",
+    "assetsSelector": {
+        "@type": "CriterionDto",
+        "operandLeft": "https://w3id.org/edc/v0.0.1/ns/id",
+        "operator": "=",
+        "operandRight": "kafka-provider-asset"
+    }
+}

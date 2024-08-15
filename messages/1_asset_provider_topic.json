@@ -1,0 +1,24 @@
+{
+    "@context": {
+      "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
+    },
+    "@id": "kafka-provider-asset",
+    "properties": {
+        "name": "kafka-provider-asset",
+        "description": "asset for providing data with kafka",
+        "contenttype": "application/json",
+        "serviceOfferingName": "kafka-provider-service",
+        "serviceOfferingDescription": "service for providing data with kafka",
+        "endPoint": "http://localhost",
+        "protocol": "DSP",
+        "port": 8080,
+        "host": "localhost",
+        "version": "1.0"
+    },
+    "dataAddress": {
+      "type": "Kafka",
+      "kafka.bootstrap.servers": "localhost:29092",
+      "topic": "provider"
+    }
+  }
+  
