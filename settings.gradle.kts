@@ -29,3 +29,4 @@ dependencyResolutionManagement {
 }
 
 include(":connector")
+include(":roms:extensions:gxfs-catalog-extension")

@@ -1,0 +1,73 @@
+version: '2'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  
+  provider:
+    image: edc-connector:latest
+    hostname: provider
+    build:
+      context: .
+    environment:
+      - EDC_PARTICIPANT_ID=provider
+      - EDC_CONVERTER_VAT_ID=DE124904070
+      - EDC_CONVERTER_COMPANY_NAME=Materna_SE
+      - EDC_CONVERTER_LOCATION=51.50531700844637_7.493938768105928
+      - EDC_CONVERTER_COUNTRY_subdivision_CODE=DE-NW
+      - WEB_HTTP_PORT=19191
+      - WEB_HTTP_CONTROL_PORT=19192
+      - WEB_HTTP_MANAGEMENT_PORT=19193
+      - WEB_HTTP_PROTOCOL_PORT=19194
+      - WEB_HTTP_PUBLIC_PORT=19291
+      - EDC_DSP_CALLBACK_ADDRESS=http://provider:19194/protocol
+      - EDC_DATAPLANE_TOKEN_VALIDATION_ENDPOINT=http://provider:19192/control/token
+    ports:
+      - "19191:19191"
+      - "19192:19192"
+      - "19193:19193"
+      - "19194:19194"
+      - "19291:19291"
+  
+  consumer:
+    image: edc-connector:latest
+    hostname: consumer
+    build:
+      context: .
+    environment:
+      - EDC_PARTICIPANT_ID=consumer
+      - EDC_CONVERTER_VAT_ID=DE124904070
+      - EDC_CONVERTER_COMPANY_NAME=Materna_SE
+      - EDC_CONVERTER_LOCATION=51.50531700844637_7.493938768105928
+      - EDC_CONVERTER_COUNTRY_subdivision_CODE=DE-NW
+      - WEB_HTTP_PORT=29191
+      - WEB_HTTP_CONTROL_PORT=29192
+      - WEB_HTTP_MANAGEMENT_PORT=29193
+      - WEB_HTTP_PROTOCOL_PORT=29194
+      - WEB_HTTP_PUBLIC_PORT=29291
+      - EDC_DSP_CALLBACK_ADDRESS=http://consumer:29194/protocol
+      - EDC_DATAPLANE_TOKEN_VALIDATION_ENDPOINT=http://consumer:29192/control/token
+    ports:
+      - "29191:29191"
+      - "29192:29192"
+      - "29193:29193"
+      - "29194:29194"
+      - "29291:29291"

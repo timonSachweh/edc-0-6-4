@@ -10,6 +10,8 @@ main() {
         start_kafka
     elif [ "$1" == "provider" ]; then
         start_provider
+    elif [ "$1" == "docker-connectors" ]; then
+        start_docker_connectors
     elif [ "$1" == "consumer" ]; then
         start_consumer
     elif [ "$1" == "messages" ]; then
@@ -60,7 +62,7 @@ main() {
 }
 
 print_usage() {
-    printf "Usage: \n$0 build\n$0 provider\n$0 consumer\n$0 messages\n\n$0 message 0|dataplanes\n$0 message 1|asset\n$0 message 2|policy\n$0 message 3|contract|contractDefinition\n$0 message 4|catalog|fetchCatalog\n$0 message 5|negotiate|contractNegotiation\n$0 message 6|agreement|contractAgreement <agreementId>\n$0 message 7|transfer|startTransfer\n$0 message 8|transferStatus <transferProcessId>\n"
+    printf "Usage: \n$0 build\n$0 docker-connectors\n$0 provider\n$0 consumer\n$0 messages\n\n$0 message 0|dataplanes\n$0 message 1|asset\n$0 message 2|policy\n$0 message 3|contract|contractDefinition\n$0 message 4|catalog|fetchCatalog\n$0 message 5|negotiate|contractNegotiation\n$0 message 6|agreement|contractAgreement <agreementId>\n$0 message 7|transfer|startTransfer\n$0 message 8|transferStatus <transferProcessId>\n"
 }
 
 build_connector() {
@@ -70,12 +72,17 @@ build_connector() {
 
 start_kafka() {
     echo "Starting kafka"
-    docker-compose -f docker-compose-kafka.yml up
+    docker-compose -f docker-compose.yml up kafka zookeeper
 }
 
 start_provider() {
     echo "Starting provider"
     java -Dedc.keystore=connector/resources/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=connector/resources/configuration/provider-vault.properties -Dedc.fs.config=connector/resources/configuration/provider.properties -jar connector/build/libs/roms-connector.jar
+}
+
+start_docker_connectors() {
+    echo "Starting provider"
+    docker-compose -f docker-compose.yml up provider consumer
 }
 
 start_consumer() {

@@ -17,7 +17,7 @@
     },
     "dataAddress": {
       "type": "Kafka",
-      "kafka.bootstrap.servers": "localhost:29092",
+      "kafka.bootstrap.servers": "kafka:29092",
       "topic": "provider"
     }
   }
