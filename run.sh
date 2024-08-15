@@ -62,7 +62,7 @@ main() {
 }
 
 print_usage() {
-    printf "Usage: \n$0 build\n$0 provider\n$0 consumer\n$0 messages\n\n$0 message 0|dataplanes\n$0 message 1|asset\n$0 message 2|policy\n$0 message 3|contract|contractDefinition\n$0 message 4|catalog|fetchCatalog\n$0 message 5|negotiate|contractNegotiation\n$0 message 6|agreement|contractAgreement <agreementId>\n$0 message 7|transfer|startTransfer\n$0 message 8|transferStatus <transferProcessId>\n"
+    printf "Usage: \n$0 build\n$0 docker-connectors\n$0 provider\n$0 consumer\n$0 messages\n\n$0 message 0|dataplanes\n$0 message 1|asset\n$0 message 2|policy\n$0 message 3|contract|contractDefinition\n$0 message 4|catalog|fetchCatalog\n$0 message 5|negotiate|contractNegotiation\n$0 message 6|agreement|contractAgreement <agreementId>\n$0 message 7|transfer|startTransfer\n$0 message 8|transferStatus <transferProcessId>\n"
 }
 
 build_connector() {

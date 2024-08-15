@@ -22,21 +22,27 @@ Run the following command to build the edc connector in version 0.6.4:
 You need to open a new terminal tab for each service, to start all components in parallel and see the logs.
 
 ### Start Kafka Broker
-Starts the kafka broker as docker containers from the docker-compose configuration located in the __docker-compose-kafka.yml__ file.
+Starts the kafka broker as docker containers from the docker-compose configuration located in the __docker-compose.yml__ file.
 ```
 ./run.sh kafka
 ```
 
-### Start Provider Connector
+### Start Provider and Consumer Connector inside Docker
+Will start the provider and consumer connector inside of the same docker-network, as the kafka service is deployed.
+```
+./run.sh docker-connectors
+```
 
-Starts the provider edc connector with provider configurations from the __connector/resources__ directory.
+### Start Provider Connector
+As alternative to the docker-deployment, you can also start the connectors simply from the jar file.
+To do so, the provider edc connector with provider configurations from the __connector/resources__ directory is started by:
 ```
 ./run.sh provider
 ```
 
 ### Start Consumer Connector
-
-Starts the consumer edc connector with consumer configurations from the __connector/resources__ directory.
+As alternative to the docker-deployment, you can also start the connectors simply from the jar file.
+To do so, the consumer edc connector with consumer configurations from the __connector/resources__ directory is started by:
 ```
 ./run.sh consumer
 ```
