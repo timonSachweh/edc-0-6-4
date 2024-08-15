@@ -10,6 +10,8 @@ main() {
         start_kafka
     elif [ "$1" == "provider" ]; then
         start_provider
+    elif [ "$1" == "docker-connectors" ]; then
+        start_docker_connectors
     elif [ "$1" == "consumer" ]; then
         start_consumer
     elif [ "$1" == "messages" ]; then
@@ -70,12 +72,17 @@ build_connector() {
 
 start_kafka() {
     echo "Starting kafka"
-    docker-compose -f docker-compose-kafka.yml up
+    docker-compose -f docker-compose.yml up kafka zookeeper
 }
 
 start_provider() {
     echo "Starting provider"
     java -Dedc.keystore=connector/resources/certs/cert.pfx -Dedc.keystore.password=123456 -Dedc.vault=connector/resources/configuration/provider-vault.properties -Dedc.fs.config=connector/resources/configuration/provider.properties -jar connector/build/libs/roms-connector.jar
+}
+
+start_docker_connectors() {
+    echo "Starting provider"
+    docker-compose -f docker-compose.yml up provider consumer
 }
 
 start_consumer() {
