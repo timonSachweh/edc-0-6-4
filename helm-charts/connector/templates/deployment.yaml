@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "connector.fullname" . }}
+  labels:
+    {{- include "connector.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "connector.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "connector.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "connector.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.http.port | default 19191 }}
+              protocol: TCP
+            - name: managment
+              containerPort: {{ .Values.service.management.port | default 19193 }}
+              protocol: TCP
+            - name: protocol
+              containerPort: {{ .Values.service.protocol.port | default 19194 }}
+              protocol: TCP
+            - name: public
+              containerPort: {{ .Values.service.public.port | default 19291 }}
+              protocol: TCP
+            - name: control
+              containerPort: {{ .Values.service.control.port | default 19192 }}
+              protocol: TCP
+          env:
+            - name: WEB_HTTP_PORT
+              value: {{ .Values.service.http.port | default 19191 | quote }}
+            - name: WEB_HTTP_PATH
+              value: {{ .Values.service.http.path | default "/api" | quote }}
+            - name: WEB_HTTP_MANAGEMENT_PORT
+              value: {{ .Values.service.management.port | default 19193 | quote }}
+            - name: WEB_HTTP_MANAGEMENT_PATH
+              value: {{ .Values.service.management.path | default "/management" | quote }}
+            - name: WEB_HTTP_PROTOCOL_PORT
+              value: {{ .Values.service.protocol.port | default 19194 | quote }}
+            - name: WEB_HTTP_PROTOCOL_PATH
+              value: {{ .Values.service.protocol.path | default "/protocol" | quote }}
+            - name: WEB_HTTP_PUBLIC_PORT
+              value: {{ .Values.service.public.port | default 19291 | quote }}
+            - name: WEB_HTTP_PUBLIC_PATH
+              value: {{ .Values.service.public.path | default "/public" | quote }}
+            - name: WEB_HTTP_CONTROL_PORT
+              value: {{ .Values.service.control.port | default 19192 | quote }}
+            - name: WEB_HTTP_CONTROL_PATH
+              value: {{ .Values.service.control.path | default "/control" | quote }}
+            
+            - name: EDC_DSP_CALLBACK_ADDRESS
+              value: {{ include "connector.dspCallbackAddress" . | quote }}
+            - name: EDC_DATAPLANE_TOKEN_VALIDATION_ENDPOINT
+              value: {{ include "connector.dataplaneTokenValidationEndpoint" . | quote }}
+              
+            - name: EDC_PARTICIPANT_ID
+              value: {{ .Values.service.edc.id | default "participant" }}
+            - name: EDC_CONVERTER_VAT_ID
+              value: {{ .Values.service.edc.company.vatId | quote }}
+            - name: EDC_CONVERTER_COMPANY_NAME
+              value: {{ .Values.service.edc.company.name | quote }}
+            - name: EDC_CONVERTER_LOCATION
+              value: {{ .Values.service.edc.company.location | quote }}
+            - name: EDC_CONVERTER_COUNTRY_SUBDIVISION_CODE
+              value: {{ .Values.service.edc.company.countrySubdivisionCode | default "AuRbD2xmTSYECk59s7BezM" | quote }}
+            {{ if .Values.env }}
+            {{- toYaml .Values.env | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts: 
+            - name: certsecrets
+              mountPath: "/app/resources/certs"
+              readOnly: true
+            #- name: gaiaxressources
+            #  mountPath: "/app/resources/gaia-x"
+            #  readOnly: false
+            - name: applicationconfig
+              mountPath: "/app/resources/configuration"
+              readOnly: true
+      volumes:
+        - name: certsecrets
+          secret:
+            secretName: {{ include "connector.fullname" . }}-certsecrets
+        - name: gaiaxressources
+          persistentVolumeClaim:
+            claimName: {{ include "connector.fullname" . }}-gaiaxpvc
+        - name: applicationconfig
+          configMap:
+            name: {{ include "connector.fullname" . }}-appconfigmap
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
