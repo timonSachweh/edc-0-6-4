@@ -3,6 +3,9 @@
 contractId=""
 transferProcessId=""
 
+providerManagement="http://provider:19193/management"
+consumerManagement="http://consumer:19193/management"
+
 main() {
     if [ "$1" == "build" ]; then
         build_connector
@@ -94,33 +97,33 @@ start_consumer() {
 
 message_dataplanes() {
     echo "Configuring dataplane endpoints"
-    output=$(curl -H 'Content-Type: application/json' -d @messages/0_register_dataplane_provider.json -X POST "http://provider:19193/management/v2/dataplanes" -s)
+    output=$(curl -H 'Content-Type: application/json' -d @messages/0_register_dataplane_provider.json -X POST "$providerManagement/v2/dataplanes" -s)
     pretty_print
-    output=$(curl -H 'Content-Type: application/json' -d @messages/0_register_dataplane_consumer.json -X POST "http://consumer:29193/management/v2/dataplanes" -s)
+    output=$(curl -H 'Content-Type: application/json' -d @messages/0_register_dataplane_consumer.json -X POST "$consumerManagement/v2/dataplanes" -s)
     pretty_print
 }
 
 message_asset() {
     echo "Creating kafka push asset"
-    output=$(curl -H 'Content-Type: application/json' -d @messages/1_asset_provider_topic.json -X POST http://provider:19193/management/v3/assets -s)
+    output=$(curl -H 'Content-Type: application/json' -d @messages/1_asset_provider_topic.json -X POST $providerManagement/v3/assets -s)
     pretty_print
 }
 
 message_policy() {
     echo "Creating policy"
-    output=$(curl -H 'Content-Type: application/json' -d @messages/2_policy_definition.json -X POST http://provider:19193/management/v2/policydefinitions -s)
+    output=$(curl -H 'Content-Type: application/json' -d @messages/2_policy_definition.json -X POST $providerManagement/v2/policydefinitions -s)
     pretty_print
 }
 
 message_contract_definition() {
     echo "Creating contract definition"
-    output=$(curl -H 'Content-Type: application/json' -d @messages/3_contract_definition.json -X POST http://provider:19193/management/v2/contractdefinitions -s)
+    output=$(curl -H 'Content-Type: application/json' -d @messages/3_contract_definition.json -X POST $providerManagement/v2/contractdefinitions -s)
     pretty_print
 }
 
 message_fetch_catalog() {
     echo "Fetching catalog"
-    output=$(curl -H 'Content-Type: application/json' -d @messages/4_fetch_catalog.json -X POST http://consumer:29193/management/v2/catalog/request -s)
+    output=$(curl -H 'Content-Type: application/json' -d @messages/4_fetch_catalog.json -X POST $consumerManagement/v2/catalog/request -s)
     pretty_print
     policyId=$(echo $output | jq -r '."dcat:dataset"."odrl:hasPolicy"."@id"')
     printf "Policy id: $policyId\n"
@@ -129,7 +132,7 @@ message_fetch_catalog() {
 
 message_negotiate_contract() {
     echo "Negotiating contract"
-    output=$(curl -H 'Content-Type: application/json' -d @messages/5_contract_negotiation.json -X POST http://consumer:29193/management/v2/contractnegotiations -s)
+    output=$(curl -H 'Content-Type: application/json' -d @messages/5_contract_negotiation.json -X POST $consumerManagement/v2/contractnegotiations -s)
     pretty_print
     contractId=$(echo $output | jq -r '."@id"')
     printf "Contract id: $contractId\n"
@@ -137,7 +140,7 @@ message_negotiate_contract() {
 
 message_contract_agreement() {
     echo "Get Contract Status"
-    output=$(curl -H 'Content-Type: application/json' -X GET http://consumer:29193/management/v2/contractnegotiations/$1 -s)
+    output=$(curl -H 'Content-Type: application/json' -X GET $consumerManagement/v2/contractnegotiations/$1 -s)
     pretty_print
     contractAgreementId=$(echo $output | jq -r '."contractAgreementId"')
     printf "Contract Agreement id: $contractAgreementId\n"
@@ -146,7 +149,7 @@ message_contract_agreement() {
 
 message_start_transfer() {
     echo "Starting transfer"
-    output=$(curl -H 'Content-Type: application/json' -d @messages/7_start_transfer.json -X POST http://consumer:29193/management/v2/transferprocesses -s)
+    output=$(curl -H 'Content-Type: application/json' -d @messages/7_start_transfer.json -X POST $consumerManagement/v2/transferprocesses -s)
     pretty_print
     transferProcessId=$(echo $output | jq -r '."@id"')
     printf "Transfer process id: $transferProcessId\n"
@@ -154,7 +157,7 @@ message_start_transfer() {
 
 message_transfer_status() {
     echo "Get Transfer Status"
-    output=$(curl -H 'Content-Type: application/json' -X GET http://consumer:29193/management/v2/transferprocesses/$1 -s)
+    output=$(curl -H 'Content-Type: application/json' -X GET $consumerManagement/v2/transferprocesses/$1 -s)
     pretty_print
 }
 
