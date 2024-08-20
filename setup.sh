@@ -10,12 +10,17 @@ export consumerControl=""
 export consumerPublic=""
 export consumerProtocol=""
 
+export providerId=""
+
 
 main() {
     #printVariables
 
     if [ -n "$kafka" ]; then
         setKafkaUrl $kafka
+    fi
+    if [ -n "$providerId" ]; then
+        setProviderId $providerId
     fi
     if [ -n "$providerManagement" ]; then
         setProviderManagement $providerManagement
@@ -41,6 +46,12 @@ main() {
     if [ -n "$consumerProtocol" ]; then
         setConsumerProtocol $consumerProtocol
     fi
+}
+
+setProviderId() {
+    echo "Setting provider id to $1"
+    jq --arg k "$1" '."policy"."assigner" = $k' messages/5_contract_negotiation.json > tmp.json && mv tmp.json messages/5_contract_negotiation.json
+    jq --arg k "$1" '."connectorId" = $k' messages/7_start_transfer.json > tmp.json && mv tmp.json messages/7_start_transfer.json
 }
 
 setKafkaUrl() {
@@ -88,6 +99,7 @@ setConsumerPublic() {
 
 printVariables() {
     echo "kafka: $kafka"
+    echo "providerId: $providerId"
     echo "providerManagement: $providerManagement"
     echo "providerControl: $providerControl"
     echo "providerPublic: $providerPublic"
@@ -102,6 +114,7 @@ showHelp() {
     echo "Options:"
     echo "  -h, --help                           Show this help message and exit"
     echo "  --kafka <url>                        Set the kafka url"
+    echo "  --provider-id <connectorId>          Set the provider connector id"
     echo "  --provider-management <url>          Set the provider management url"
     echo "  --provider-control <url>             Set the provider control url"
     echo "  --provider-public <url>              Set the provider public url"
@@ -112,7 +125,7 @@ showHelp() {
 }
 
 # Call getopt to validate the provided input. 
-options=$(getopt -o "h" --long "help,kafka:,provider-management:,provider-control:,provider-public:,provider-protocol:,consumer-management:,consumer-control:,consumer-public:" -- "$@")
+options=$(getopt -o "h" --long "help,kafka:,provider-id:,provider-management:,provider-control:,provider-public:,provider-protocol:,consumer-management:,consumer-control:,consumer-public:" -- "$@")
 [ $? -eq 0 ] || { 
     echo "Incorrect options provided"
     exit 1
@@ -127,6 +140,10 @@ while true; do
     --kafka)
         shift;
         export kafka=$1
+        ;;
+    --provider-id)
+        shift;
+        export providerId=$1
         ;;
     --provider-management)
         shift;
