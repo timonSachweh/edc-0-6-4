@@ -1,22 +1,21 @@
 {
-    "@context": {
-      "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
-    },
-    "@id": "http-pull-consumer-dataplane",
-    "url": "http://localhost:29192/control/transfer",
-    "allowedSourceTypes": [
-      "HttpData",
-      "Kafka",
-      "KafkaBroker"
-    ],
-    "allowedDestTypes": [
-      "HttpProxy",
-      "HttpData",
-      "Kafka",
-      "KafkaBroker"
-    ],
-    "properties": {
-      "https://w3id.org/edc/v0.0.1/ns/publicApiUrl/publicApiUrl": "http://localhost:29291/public/"
-    }
+  "@context": {
+    "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
+  },
+  "@id": "http-pull-consumer-dataplane",
+  "url": "http://localhost:29192/control",
+  "allowedSourceTypes": [
+    "HttpData",
+    "Kafka",
+    "KafkaBroker"
+  ],
+  "allowedDestTypes": [
+    "HttpProxy",
+    "HttpData",
+    "Kafka",
+    "KafkaBroker"
+  ],
+  "properties": {
+    "https://w3id.org/edc/v0.0.1/ns/publicApiUrl/publicApiUrl": "http://localhost:29291/api"
   }
-  
+}
