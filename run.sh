@@ -3,8 +3,8 @@
 contractId=""
 transferProcessId=""
 
-providerManagement="http://provider:19193/management"
-consumerManagement="http://consumer:19193/management"
+providerManagement="http://localhost:19193/management"
+consumerManagement="http://localhost:29193/management"
 
 main() {
     if [ "$1" == "build" ]; then

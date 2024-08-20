@@ -52,7 +52,7 @@ setKafkaUrl() {
 setProviderManagement() {
     echo "Setting provider management url to $1"
     sed -i -r "s%^providerManagement=\"[^ ]*\"%providerManagement=\"${providerManagement}\"%" run.sh
-
+    rm run.sh-r
 }
 setProviderControl() {
     echo "Setting provider control url to $1"
@@ -72,6 +72,7 @@ setProviderProtocol() {
 setConsumerManagement() {
     echo "Setting consumer management url to $1"
     sed -i -r "s%^consumerManagement=\"[^ ]*\"%consumerManagement=\"${consumerManagement}\"%" run.sh
+    rm run.sh-r
 }
 setConsumerControl() {
     echo "Setting consumer control url to $1"
