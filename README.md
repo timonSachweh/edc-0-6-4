@@ -6,16 +6,26 @@ This repo shows an example deployment for edc with kafka extension to publish da
 
 You need to have __jq__ installed on your system for pretty json outputs. Additionally, you need to have __docker__ and __docker-compose__ installed to use the sample deployment for the kafka broker.
 
-You need to configure dns resolution for the following hostnames:
-- __kafka__: 127.0.0.1
-- __provider__: 127.0.0.1
-- __consumer__: 127.0.0.1
-
 ### Build connector.jar
 
 Run the following command to build the edc connector in version 0.6.4:
 ```
 ./run.sh build
+```
+
+### Changing urls for requests
+
+You can change the urls for the requests based on the deployment of the connectors and kafka-brokers.
+Just call:
+```
+./setup.sh  --kafka kafka:29092 \
+  --provider-management http://localhost:19193/management \
+  --provider-control http://localhost:19192/control \
+  --provider-public http://localhost:19291/api \
+  --provider-protocol http://localhost:19194/protocol \
+  --consumer-management http://localhost:29193/management \
+  --consumer-control http://localhost:29192/control \
+  --consumer-public http://localhost:29291/api
 ```
 
 ## Starting Services
