@@ -10,6 +10,7 @@ authors:
   given-names: Henning
 - family-names: Liebig
   given-names: Thomas
+  orcid: https://orcid.org/0000-0002-9841-1101
 title: "FedDSGcon: PoC and tools for Data Spaces with EDC"
 version: 1.0.0
 date-released: 2025-01-27
