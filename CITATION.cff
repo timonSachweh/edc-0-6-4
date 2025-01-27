@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: Sachweh
+  given-names: Timon
+  orcid: https://orcid.org/0000-0002-0347-5760
+- family-names: Kuhlmann
+  given-names: Helen
+- family-names: Gösling
+  given-names: Henning
+- family-names: Liebig
+  given-names: Thomas
+title: "FedDSGcon: PoC and tools for Data Spaces with EDC"
+version: 1.0.0
+date-released: 2025-01-27
+url: "https://github.com/timonSachweh/edc-0-6-4"
