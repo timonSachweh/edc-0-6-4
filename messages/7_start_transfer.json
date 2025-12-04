@@ -5,13 +5,13 @@
   "@type": "TransferRequestDto",
   "connectorId": "provider",
   "counterPartyAddress": "http://localhost:19194/protocol",
-  "contractId": "5ae34c65-c506-4146-9add-25183c0368fa",
+  "contractId": "7390949e-e691-4eb1-bebc-bfc2afd45362",
   "assetId": "kafka-provider-asset",
   "protocol": "dataspace-protocol-http",
   "transferType": "Kafka-PUSH",
   "dataDestination": {
     "type": "Kafka",
-    "kafka.bootstrap.servers": "kafka:9092",
+    "kafka.bootstrap.servers": "kafka:9093",
     "topic": "consumer"
   }
 }
