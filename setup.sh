@@ -124,61 +124,53 @@ showHelp() {
     echo "  --consumer-public <url>              Set the consumer public url"
 }
 
-# Call getopt to validate the provided input. 
-options=$(getopt -o "h" --long "help,kafka:,provider-id:,provider-management:,provider-control:,provider-public:,provider-protocol:,consumer-management:,consumer-control:,consumer-public:" -- "$@")
-[ $? -eq 0 ] || { 
-    echo "Incorrect options provided"
-    exit 1
-}
-eval set -- "$options"
-while true; do
+# Call getopt removed — use portable parsing instead
+while [[ $# -gt 0 ]]; do
     case "$1" in
-    -h|--help)
-        showHelp
-        exit 0
-        ;;
-    --kafka)
-        shift;
-        export kafka=$1
-        ;;
-    --provider-id)
-        shift;
-        export providerId=$1
-        ;;
-    --provider-management)
-        shift;
-        export providerManagement=$1
-        ;;
-    --provider-control)
-        shift;
-        export providerControl=$1
-        ;;
-    --provider-public)
-        shift;
-        export providerPublic=$1
-        ;;
-    --provider-protocol)
-        shift;
-        export providerProtocol=$1
-        ;;
-    --consumer-management)
-        shift;
-        export consumerManagement=$1
-        ;;
-    --consumer-control)
-        shift;
-        export consumerControl=$1
-        ;;
-    --consumer-public)
-        shift;
-        export consumerPublic=$1
-        ;;
-    --)
-        shift
-        break
-        ;;
+        -h|--help)
+            showHelp
+            exit 0
+            ;;
+        --kafka)
+            kafka="$2"; shift 2
+            ;;
+        --provider-id)
+            providerId="$2"; shift 2
+            ;;
+        --provider-management)
+            providerManagement="$2"; shift 2
+            ;;
+        --provider-control)
+            providerControl="$2"; shift 2
+            ;;
+        --provider-public)
+            providerPublic="$2"; shift 2
+            ;;
+        --provider-protocol)
+            providerProtocol="$2"; shift 2
+            ;;
+        --consumer-management)
+            consumerManagement="$2"; shift 2
+            ;;
+        --consumer-control)
+            consumerControl="$2"; shift 2
+            ;;
+        --consumer-public)
+            consumerPublic="$2"; shift 2
+            ;;
+        --consumer-protocol)
+            consumerProtocol="$2"; shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Unknown option: $1"
+            showHelp
+            exit 1
+            ;;
     esac
-    shift
 done
 
 main "$@"

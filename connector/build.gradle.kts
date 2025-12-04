@@ -40,7 +40,7 @@ dependencies {
     implementation(libs.edc.data.plane.http)
     implementation(libs.edc.data.plane.kafka)
 
-    implementation(project(":roms:extensions:gxfs-catalog-extension"))
+    //implementation(project(":roms:extensions:gxfs-catalog-extension"))
 }
 
 application {
