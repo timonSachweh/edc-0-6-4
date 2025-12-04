@@ -75,7 +75,7 @@ build_connector() {
 
 start_kafka() {
     echo "Starting kafka"
-    docker-compose -f docker-compose.yml up kafka zookeeper
+    docker-compose -f docker-compose.yml up kafka
 }
 
 start_provider() {

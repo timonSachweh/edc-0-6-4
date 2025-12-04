@@ -18,7 +18,7 @@ Run the following command to build the edc connector in version 0.6.4:
 You can change the urls for the requests based on the deployment of the connectors and kafka-brokers.
 Just call:
 ```
-./setup.sh  --kafka kafka:29092 \
+./setup.sh  --kafka kafka:9092 \
   --provider-management http://localhost:19193/management \
   --provider-control http://localhost:19192/control \
   --provider-public http://localhost:19291/api \

@@ -11,7 +11,7 @@
   "transferType": "Kafka-PUSH",
   "dataDestination": {
     "type": "Kafka",
-    "kafka.bootstrap.servers": "kafka:29092",
+    "kafka.bootstrap.servers": "kafka:9092",
     "topic": "consumer"
   }
 }
